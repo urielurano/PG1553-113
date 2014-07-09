@@ -74,7 +74,7 @@ def comp(Ac,alpha,Em_c,Ec_c):
     alp=alpha
     Emc=Em_c
     Ecc=Ec_c
-    for ii in arange(1.56, 14.6, 3.25):
+    for ii in arange(1.56, 13, 3.2):
         Ega0=pow(10,ii)
         Egamma=Ega0
         C1=0
@@ -97,6 +97,36 @@ def comp(Ac,alpha,Em_c,Ec_c):
 
     outspec.close()
 
+def comp_pgamma(param1, param2):
+
+    '''Make a dat file with the fitted points '''
+
+    outspec = open("comp_pgamma.dat","w")
+    Apg=param1
+    alpg=param2
+    Epg=1e11
+    E_min = 0.06e12
+    Epg0 = 0.1e12
+    E_max = 1e12
+    for ii in arange(10.9, 13, 0.05):
+        Ega0=pow(10,ii)
+        Egamma=Ega0
+        C1=0
+        C2=0
+        C3=0
+        if(Egamma < Epg):
+            C1=Apg*pow(Epg/Epg0,-1.0)*pow(Egamma/Epg0,3.0-alpg)
+        if(Egamma >= Epg and Egamma < E_max):
+            C2=Apg*pow(Egamma/Epg0,2.0-alpg)
+        if(Egamma >= E_max):
+            C3=Apg*pow(Egamma/Epg0,0.5-alpg)
+
+        C=C1+C2+C3
+
+        outspec.write("%E %E\n" %(Ega0,C))
+
+    outspec.close()
+
 
 
 ##########################################################################################
@@ -107,26 +137,21 @@ def make_SplinePlot():
 
     ''' Make the spline of the plot '''
 
-    XS, YS = loadtxt('/home/antonio/nissimExercises/NGC1275/syn.dat', unpack = True)
-    XC, YC = loadtxt('/home/antonio/nissimExercises/NGC1275/comp.dat', unpack = True)
 
     try:
 
-            X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/ebl.dat', unpack = True)
-            X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/kvaminmax.dat', unpack = True)
-            X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/lat.dat', unpack = True)
-            X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/MAGIC.dat', unpack = True)
-            X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/ned.dat', unpack = True)
-            X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/rxtasmavg.dat', unpack = True)
-            X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/suzaku.dat', unpack = True)
-            X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftbatavg.dat', unpack = True)
-            X8,Y8, X8_izq, X8_der, Y8_arr, Y8_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftuvot.dat', unpack = True)
-            X9,Y9, X9_izq, X9_der, Y9_arr, Y9_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftxrthi.dat', unpack = True)
-            X10,Y10, X10_izq, X10_der, Y10_arr, Y10_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftxrtmed.dat', unpack = True)
+            X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/Escritorio/NGC1275/FERMI.dat', unpack = True)
+            X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/Escritorio/NGC1275/magic.dat', unpack = True)
+            X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/Escritorio/NGC1275/MisuMe.dat', unpack = True)
+            X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/Escritorio/NGC1275/mojave.dat', unpack = True)
+            X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/Escritorio/NGC1275/ratan.dat', unpack = True)
+            X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/Escritorio/NGC1275/Swift_uvot.dat', unpack = True)
+            X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba= loadtxt('/home/antonio/Escritorio/NGC1275/unkown.dat', unpack = True)
 
             
-            XS, YS = loadtxt('/home/antonio/nissimExercises/PG1553+113/syn.dat', unpack = True)
-            XC, YC = loadtxt('/home/antonio/nissimExercises/PG1553+113/comp.dat', unpack = True)
+            XS, YS = loadtxt('/home/antonio/Escritorio/NGC1275/syn.dat', unpack = True)
+            XC, YC = loadtxt('/home/antonio/Escritorio/NGC1275/comp.dat', unpack = True)
+            XG, YG = loadtxt('/home/antonio/Escritorio/NGC1275/comp_pgamma.dat', unpack = True)
             
             verts = []
             codes = [Path.MOVETO]
@@ -146,12 +171,25 @@ def make_SplinePlot():
 
             pathC = Path(vertsC, codesC)
 
+            vertsG = []
+            codesG = [Path.MOVETO]
+            for elem in range(0, len(XG)):
+                vertsG.append((XG[elem], YG[elem]*2.7))
+            for elem in range(0, (len(XG)-1)):
+                codesG.append(Path.CURVE4)
+
+            pathG = Path(vertsG, codesG)
+
+
             fig = plt.figure()
             ax = fig.add_subplot(111)
             patchS = patches.PathPatch(path, facecolor='none', lw=2)
             patchC = patches.PathPatch(pathC, facecolor='none', lw=2)
+            patchG = patches.PathPatch(pathG, facecolor='none', lw=2)
             ax.add_patch(patchS)
             ax.add_patch(patchC)
+            ax.add_patch(patchG)
+
                         
             ax.errorbar(X,Y, Y_arr, Y_aba, linestyle="none", marker="o", color="green", markersize=4.0, capsize=3.0, label = '1')
             ax.errorbar(X1,Y1, Y1_arr, Y1_aba, linestyle="none", marker="o", color="blue", markersize=4.0, capsize=3.0, label = '2')
@@ -166,7 +204,7 @@ def make_SplinePlot():
             a.set_yscale('log')
             a.set_xscale('log')
             plt.ylabel(r'epsilon', size=12)
-            plt.xlim(1e-6,1e13)
+            plt.xlim(1e-6,1e14)
             plt.ylim(1e-9,1e-3)
             plt.show()
             
@@ -197,8 +235,7 @@ def makeFit(files):
         mt = []
         separados = []
         
-        path = '/home/antonio/nissimExercises/PG1553+113/'
-
+        path = '/home/antonio/Escritorio/NGC1275/'
         i = 0;
         while(i < len(files)):
             pathFile = path + files[i]
@@ -220,7 +257,7 @@ def makeFit(files):
         Xder = np.array(xder, float)
         Yarr = np.array(yarr, float)
         Yaba = np.array(yaba, float)
-
+        
         ##Make the plots from root
         
         graph = rt.TGraphErrors(len(x1), X, Y, Xizq, Yarr)
@@ -254,6 +291,8 @@ def makeFit(files):
         alfa = rt.fun4.GetParameter(1)
         em_s = rt.fun4.GetParameter(2)
         ec_s = rt.fun4.GetParameter(3)
+        
+        #print a_s, alfa, em_s, ec_s
 
         fun2 = rt.TF1("fun2"," [0]*((x/[1])^(4/3)*(x>1e3)*(x<[1])+((x/[1])**((3-[3])/2)*(x>=[1])*(x<[2])) + (([2]/[1])**((3-[3])/2))*((x/[2])**((2-[3])/2))*(x>=[2])*(x<3e10) )",1e+3,3e+10)
         rt.fun2.SetParameter(0,6.32041e-07)
@@ -272,10 +311,21 @@ def makeFit(files):
         a_c = rt.fun2.GetParameter(0)
         em_c = rt.fun2.GetParameter(1)
         ec_c = rt.fun2.GetParameter(2)
-	
+
+        fun3 =  rt.TF1("fun3"," [0]*((0.1e12/0.1e12)^(-1)*(x/0.1e12)**(3-[1])*(x>=0.06e12)*(x<0.1e12)+((x/0.1e12)**(2-[1])*(x>=0.1e12)*(x<5e13)))",1E11,7E14) #Interaction pgamma
+        rt.fun3.SetParameter(0,3.696e-6)
+        rt.fun3.SetParameter(1,4.245)
+        graph.Fit('fun3',"Q")
+        rt.fun3.Draw('L same')
+
+	alfa_pg = rt.fun3.GetParameter(0)
+        a_pg = rt.fun3.GetParameter(1)
+
+        print alfa_pg, a_pg
 
 	sync(a_s, alfa, em_s, ec_s)
 	comp(a_c, alfa, em_c, ec_c)
+        comp_pgamma(alfa_pg, a_pg)
 
         
     except:
@@ -285,23 +335,19 @@ def makeFit(files):
 
 def _showMathPlotlib():
     ''' Make the plot on matplotlib  '''
+
+    X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/Escritorio/NGC1275/FERMI.dat', unpack = True)
+    X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/Escritorio/NGC1275/magic.dat', unpack = True)
+    X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/Escritorio/NGC1275/MisuMe.dat', unpack = True)
+    X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/Escritorio/NGC1275/mojave.dat', unpack = True)
+    X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/Escritorio/NGC1275/ratan.dat', unpack = True)
+    X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/Escritorio/NGC1275/Swift_uvot.dat', unpack = True)
+    X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba= loadtxt('/home/antonio/Escritorio/NGC1275/unkown.dat', unpack = True)
+    X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba= loadtxt('/home/antonio/Escritorio/NGC1275/butterfly-final.dat', unpack = True)
     
-    X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/ebl.dat', unpack = True)
-    X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/kvaminmax.dat', unpack = True)
-    X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/lat.dat', unpack = True)
-    X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/MAGIC.dat', unpack = True)
-    X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/ned.dat', unpack = True)
-    X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/rxtasmavg.dat', unpack = True)
-    X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/suzaku.dat', unpack = True)
-    X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftbatavg.dat', unpack = True)
-    X8,Y8, X8_izq, X8_der, Y8_arr, Y8_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftuvot.dat', unpack = True)
-    X9,Y9, X9_izq, X9_der, Y9_arr, Y9_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftxrthi.dat', unpack = True)
-    X10,Y10, X10_izq, X10_der, Y10_arr, Y10_aba = loadtxt('/home/antonio/nissimExercises/PG1553+113/swiftxrtmed.dat', unpack = True)
-    
-    
-    XS, YS = loadtxt('/home/antonio/nissimExercises/PG1553+113/syn.dat', unpack = True)
-    XC, YC = loadtxt('/home/antonio/nissimExercises/PG1553+113/comp.dat', unpack = True)
-            
+    XS, YS = loadtxt('/home/antonio/Escritorio/NGC1275/syn.dat', unpack = True)
+    XC, YC = loadtxt('/home/antonio/Escritorio/NGC1275/comp.dat', unpack = True)
+    XG, YG = loadtxt('/home/antonio/Escritorio/NGC1275/comp_pgamma.dat', unpack = True)
     
 
     plt.figure('Experiments')
@@ -315,18 +361,26 @@ def _showMathPlotlib():
     plt.errorbar(X6,Y6, Y6_arr, Y6_aba, linestyle="none", marker="o", color="pink", markersize=4.0, capsize=3.0, label = '7')
     plt.errorbar(X7,Y7, Y7_arr, Y7_aba, linestyle="none", marker="o", color="magenta", markersize=4.0, capsize=3.0, label = '8')
     plt.plot(XS,YS)
-    plt,plot(XC,YC)
+    plt.plot(XC,YC, color = 'blue')
+    plt.plot(XG,YG, color = 'red')
 
     a=plt.gca()
     a.set_yscale('log')
     a.set_xscale('log')
-
+    plt.xlim(1e-6,1e14)
+    plt.ylim(1e-9,1e-3)
     plt.show()
 
-files = ['ebl.dat','kvaminmax.dat','lat.dat','MAGIC.dat',
-         'ned.dat','rxtasmavg.dat','suzaku.dat','swiftbatavg.dat',
-         'swiftuvot.dat','swiftxrthi.dat','swiftxrtmed.dat']
 
-makeFit(files)
-#_showMathPlotlib()
+
+
+
+
+
+
+files = ['FERMI.dat', 'MisuMe.dat', 'mojave.dat', 'ratan.dat', 'Swift_uvot.dat',
+         'unkown.dat', 'butterfly-final.dat','magic.dat']
+
+#makeFit(files)
+_showMathPlotlib()
 make_SplinePlot()
