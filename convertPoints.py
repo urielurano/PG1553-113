@@ -35,22 +35,22 @@ def convert_points(filesArray):
                     y1.append(pow(10,b))
 
                     if c != 0: 
-                        xizq.append(pow(10,a)-pow(10,c))
+                        xizq.append(abs(pow(10,a)-pow(10,c)))
                     else:
                         xizq.append(0.0)
 
                     if d != 0:
-                        xder.append(pow(10,a)-pow(10,d))
+                        xder.append(abs(pow(10,a)-pow(10,d)))
                     else:
                         xder.append(0.0)
                         
                     if e != 0:
-                        yarr.append(pow(10,b)-pow(10,e))
+                        yarr.append(abs(pow(10,b)-pow(10,e)))
                     else:
                         yarr.append(0.0)
 
                     if f != 0:
-                        yaba.append(pow(10,b)-pow(10,f))
+                        yaba.append(abs(pow(10,b)-pow(10,f)))
                     else:
                         yaba.append(0.0)
                 
