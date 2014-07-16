@@ -41,7 +41,7 @@ def sync(As,alpha, Em_s, Ec_s):
     alp=alpha
     Ems=Em_s
     Ecs=Ec_s
-    for ii in arange(-6.0, 9.8, 2.1):
+    for ii in arange(-6.0, 6, 1.5):
         
         Ega0=pow(10,ii)
         Egamma=Ega0
@@ -53,11 +53,11 @@ def sync(As,alpha, Em_s, Ec_s):
             C1=Acs*pow(Egamma/Ems,4.0/3.0)
         if(Ems <= Egamma and  Egamma < Ecs ):
             C2=Acs*pow(Egamma/Ems,-(alp-3.0)/2.0)
-        if(1e1>Egamma >=Ecs):
+        if(5e4>Egamma >=Ecs):
             C3=Acs*pow(Ecs/Ems,-(alp-3.0)/2)*pow(Egamma/Ecs,-(alp-2.0)/2.0)
-        if(Egamma>4e1):
-            C4= Acs*pow(Ecs/Ems,-(alp-3.0)/2)*pow(Egamma/Ecs,-(alp-2.0)/2.0)
-            Ega0=4e1
+        #if(Egamma>4e1):
+            #C4= Acs*pow(Ecs/Ems,-(alp-3.0)/2)*pow(Egamma/Ecs,-(alp-2.0)/2.0)
+            #Ega0=4e1
             
         C=C1+C2+C3+C4
 
@@ -74,7 +74,7 @@ def comp(Ac,alpha,Em_c,Ec_c):
     alp=alpha
     Emc=Em_c
     Ecc=Ec_c
-    for ii in arange(1.56, 13, 3.2):
+    for ii in arange(3, 13, 2.7):
         Ega0=pow(10,ii)
         Egamma=Ega0
         C1=0
@@ -140,18 +140,22 @@ def make_SplinePlot():
 
     try:
 
-            X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/Escritorio/NGC1275/FERMI.dat', unpack = True)
-            X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/Escritorio/NGC1275/magic.dat', unpack = True)
-            X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/Escritorio/NGC1275/MisuMe.dat', unpack = True)
-            X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/Escritorio/NGC1275/mojave.dat', unpack = True)
-            X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/Escritorio/NGC1275/ratan.dat', unpack = True)
-            X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/Escritorio/NGC1275/Swift_uvot.dat', unpack = True)
-            X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba= loadtxt('/home/antonio/Escritorio/NGC1275/unkown.dat', unpack = True)
+            X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('swiftbatavg1.dat', unpack = True)
+            X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('rxtasmavg1.dat', unpack = True)
+            X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('kvaminmax1.dat', unpack = True)
+            X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('ebl1.dat', unpack = True)
+            X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('lat1.dat', unpack = True)
+            X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('MAGIC1.dat', unpack = True)
+            X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba = loadtxt('ned1.dat', unpack = True)
+            X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba = loadtxt('suzaku1.dat', unpack = True)
+            X8,Y8, X8_izq, X8_der, Y8_arr, Y8_aba = loadtxt('swiftuvot1.dat', unpack = True)
+            X9,Y9, X9_izq, X9_der, Y9_arr, Y9_aba = loadtxt('swiftxrthi1.dat', unpack = True)
+            X10,Y10, X10_izq, X10_der, Y10_arr, Y10_aba = loadtxt('swiftxrtmed1.dat', unpack = True)
 
             
-            XS, YS = loadtxt('/home/antonio/Escritorio/NGC1275/syn.dat', unpack = True)
-            XC, YC = loadtxt('/home/antonio/Escritorio/NGC1275/comp.dat', unpack = True)
-            XG, YG = loadtxt('/home/antonio/Escritorio/NGC1275/comp_pgamma.dat', unpack = True)
+            XS, YS = loadtxt('syn.dat', unpack = True)
+            XC, YC = loadtxt('comp.dat', unpack = True)
+            XG, YG = loadtxt('comp_pgamma.dat', unpack = True)
             
             verts = []
             codes = [Path.MOVETO]
@@ -197,15 +201,19 @@ def make_SplinePlot():
             ax.errorbar(X3,Y3, Y3_arr, Y3_aba, linestyle="none", marker="o", color="yellow", markersize=4.0, capsize=3.0, label = '4')
             ax.errorbar(X4,Y4, Y4_arr, Y4_aba, linestyle="none", marker="o", color="black", markersize=4.0, capsize=3.0, label = '5')
             ax.errorbar(X5,Y5, Y5_arr, Y5_aba, linestyle="none", marker="o", color="orange", markersize=4.0, capsize=3.0, label = '6')
-            ax.errorbar(X6,Y6, Y6_arr, Y6_aba, linestyle="none", marker="o", color="pink", markersize=4.0, capsize=3.0, label = '7')
+            ax.errorbar(X6,Y6, Y6_arr, Y6_aba, linestyle="none", marker="x", color="blue", markersize=4.0, capsize=3.0, label = '2')
+            ax.errorbar(X7,Y7, Y7_arr, Y7_aba, linestyle="none", marker="x", color="red", markersize=4.0, capsize=3.0, label = '3')
+            ax.errorbar(X8,Y8, Y8_arr, Y8_aba, linestyle="none", marker="x", color="yellow", markersize=4.0, capsize=3.0, label = '4')
+            ax.errorbar(X9,Y9, Y9_arr, Y9_aba, linestyle="none", marker="x", color="black", markersize=4.0, capsize=3.0, label = '5')
+            ax.errorbar(X10,Y10, Y10_arr, Y10_aba, linestyle="none", marker="x", color="orange", markersize=4.0, capsize=3.0, label = '6')
             
             
             a=plt.gca()
             a.set_yscale('log')
             a.set_xscale('log')
             plt.ylabel(r'epsilon', size=12)
-            plt.xlim(1e-6,1e14)
-            plt.ylim(1e-9,1e-3)
+            #plt.xlim(1e-6,1e14)
+            #plt.ylim(1e-9,1e-3)
             plt.show()
             
     except:
@@ -235,7 +243,9 @@ def makeFit(files):
         mt = []
         separados = []
         
-        path = '/home/antonio/Escritorio/NGC1275/'
+        path = '/home/uluviano/PG1553-113/'
+        #path = '/home/antonio/pks0447-439/'
+
         i = 0;
         while(i < len(files)):
             pathFile = path + files[i]
@@ -275,7 +285,11 @@ def makeFit(files):
         mg.GetXaxis().SetTitle('Energy (eV)')
         mg.GetYaxis().SetTitle('vFv (erg cm^{-2} s^{-1})')
 
-        fun4 = rt.TF1("fun4"," [0]*((x/[2])^(4/3)*(x>1e-6)*(x<[2])+((x/[2])**((3-[1])/2)*(x>=[2])*(x<[3])) + (([3]/[2])**((3-[1])/2))*((x/[3])**((2-[1])/2))*(x>=[3])*(x<2000))",  1e-6,2000)
+#########################################################
+######################FIT SYNCHROTRON####################
+#########################################################
+
+        fun4 = rt.TF1("fun4"," [0]*((x/[2])^(4/3)*(x>1e-6)*(x<[2])+((x/[2])**((3-[1])/2)*(x>=[2])*(x<[3])) + (([3]/[2])**((3-[1])/2))*((x/[3])**((2-[1])/2))*(x>=[3])*(x<2e4))",  1e-6,2e4)
         rt.fun4.SetParameter(1,2.5);
         rt.fun4.SetParLimits(1,2.5,3.5);
         rt.fun4.SetParameter(2,1e-4);
@@ -292,14 +306,19 @@ def makeFit(files):
         em_s = rt.fun4.GetParameter(2)
         ec_s = rt.fun4.GetParameter(3)
         
-        #print a_s, alfa, em_s, ec_s
+        print a_s, alfa, em_s, ec_s, "\n"
 
-        fun2 = rt.TF1("fun2"," [0]*((x/[1])^(4/3)*(x>1e3)*(x<[1])+((x/[1])**((3-[3])/2)*(x>=[1])*(x<[2])) + (([2]/[1])**((3-[3])/2))*((x/[2])**((2-[3])/2))*(x>=[2])*(x<3e10) )",1e+3,3e+10)
-        rt.fun2.SetParameter(0,6.32041e-07)
+#########################################################
+######################FIT INVERSE COMPTON################
+#########################################################
+
+        fun2 = rt.TF1("fun2"," [0]*((x/[1])^(4/3)*(x>1e4)*(x<[1])+((x/[1])**((3-[3])/2)*(x>=[1])*(x<[2])) + (([2]/[1])**((3-[3])/2))*((x/[2])**((2-[3])/2))*(x>=[2])*(x<3e11) )",1e+4,3e+11)
+        rt.fun2.SetParameter(0,6.32041e-05)
+        rt.fun2.SetParLimits(0,1e-18,1e-3)
         rt.fun2.SetParameter(1,1e+6)
         rt.fun2.SetParLimits(1,1e+3,1e+7)
-        rt.fun2.SetParameter(2,5e+7)
-        rt.fun2.SetParLimits(2,1e+7,1e+9)
+        rt.fun2.SetParameter(2,5e+10)
+        rt.fun2.SetParLimits(2,1e+9,1e+11)
         rt.fun2.SetParameter(3, alfa)
         rt.fun2.SetParLimits(3,alfa, alfa)
         
@@ -311,6 +330,13 @@ def makeFit(files):
         a_c = rt.fun2.GetParameter(0)
         em_c = rt.fun2.GetParameter(1)
         ec_c = rt.fun2.GetParameter(2)
+
+
+        print a_c, alfa, em_c, ec_c, "\n"
+
+#########################################################
+######################FIT P-GAMMA########################
+#########################################################
 
         fun3 =  rt.TF1("fun3"," [0]*((0.1e12/0.1e12)^(-1)*(x/0.1e12)**(3-[1])*(x>=0.06e12)*(x<0.1e12)+((x/0.1e12)**(2-[1])*(x>=0.1e12)*(x<5e13)))",1E11,7E14) #Interaction pgamma
         rt.fun3.SetParameter(0,3.696e-6)
@@ -336,18 +362,26 @@ def makeFit(files):
 def _showMathPlotlib():
     ''' Make the plot on matplotlib  '''
 
-    X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('/home/antonio/Escritorio/NGC1275/FERMI.dat', unpack = True)
-    X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('/home/antonio/Escritorio/NGC1275/magic.dat', unpack = True)
-    X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('/home/antonio/Escritorio/NGC1275/MisuMe.dat', unpack = True)
-    X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('/home/antonio/Escritorio/NGC1275/mojave.dat', unpack = True)
-    X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('/home/antonio/Escritorio/NGC1275/ratan.dat', unpack = True)
-    X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('/home/antonio/Escritorio/NGC1275/Swift_uvot.dat', unpack = True)
-    X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba= loadtxt('/home/antonio/Escritorio/NGC1275/unkown.dat', unpack = True)
-    X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba= loadtxt('/home/antonio/Escritorio/NGC1275/butterfly-final.dat', unpack = True)
-    
-    XS, YS = loadtxt('/home/antonio/Escritorio/NGC1275/syn.dat', unpack = True)
-    XC, YC = loadtxt('/home/antonio/Escritorio/NGC1275/comp.dat', unpack = True)
-    XG, YG = loadtxt('/home/antonio/Escritorio/NGC1275/comp_pgamma.dat', unpack = True)
+    X,Y, X_izq, X_der, Y_arr, Y_aba = loadtxt('swiftbatavg1.dat', unpack = True)
+    X1,Y1, X1_izq, X1_der, Y1_arr, Y1_aba = loadtxt('rxtasmavg1.dat', unpack = True)
+    X2,Y2, X2_izq, X2_der, Y2_arr, Y2_aba = loadtxt('kvaminmax1.dat', unpack = True)
+    X3,Y3, X3_izq, X3_der, Y3_arr, Y3_aba = loadtxt('ebl1.dat', unpack = True)
+    X4,Y4, X4_izq, X4_der, Y4_arr, Y4_aba = loadtxt('lat1.dat', unpack = True)
+    X5,Y5, X5_izq, X5_der, Y5_arr, Y5_aba = loadtxt('MAGIC1.dat', unpack = True)
+    X6,Y6, X6_izq, X6_der, Y6_arr, Y6_aba = loadtxt('ned1.dat', unpack = True)
+    X7,Y7, X7_izq, X7_der, Y7_arr, Y7_aba = loadtxt('suzaku1.dat', unpack = True)
+    X8,Y8, X8_izq, X8_der, Y8_arr, Y8_aba = loadtxt('swiftuvot1.dat', unpack = True)
+    X9,Y9, X9_izq, X9_der, Y9_arr, Y9_aba = loadtxt('swiftxrthi1.dat', unpack = True)
+    X10,Y10, X10_izq, X10_der, Y10_arr, Y10_aba = loadtxt('swiftxrtmed1.dat', unpack = True)
+
+
+
+
+
+
+    XS, YS = loadtxt('syn.dat', unpack = True)
+    XC, YC = loadtxt('comp.dat', unpack = True)
+    XG, YG = loadtxt('comp_pgamma.dat', unpack = True)
     
 
     plt.figure('Experiments')
@@ -358,8 +392,11 @@ def _showMathPlotlib():
     plt.errorbar(X3,Y3, Y3_arr, Y3_aba, linestyle="none", marker="o", color="yellow", markersize=4.0, capsize=3.0, label = '4')
     plt.errorbar(X4,Y4, Y4_arr, Y4_aba, linestyle="none", marker="o", color="black", markersize=4.0, capsize=3.0, label = '5')
     plt.errorbar(X5,Y5, Y5_arr, Y5_aba, linestyle="none", marker="o", color="orange", markersize=4.0, capsize=3.0, label = '6')
-    plt.errorbar(X6,Y6, Y6_arr, Y6_aba, linestyle="none", marker="o", color="pink", markersize=4.0, capsize=3.0, label = '7')
-    plt.errorbar(X7,Y7, Y7_arr, Y7_aba, linestyle="none", marker="o", color="magenta", markersize=4.0, capsize=3.0, label = '8')
+    plt.errorbar(X6,Y6, Y6_arr, Y6_aba, linestyle="none", marker="x", color="blue", markersize=4.0, capsize=3.0, label = '2')
+    plt.errorbar(X7,Y7, Y7_arr, Y7_aba, linestyle="none", marker="x", color="red", markersize=4.0, capsize=3.0, label = '3')
+    plt.errorbar(X8,Y8, Y8_arr, Y8_aba, linestyle="none", marker="x", color="yellow", markersize=4.0, capsize=3.0, label = '4')
+    plt.errorbar(X9,Y9, Y9_arr, Y9_aba, linestyle="none", marker="x", color="black", markersize=4.0, capsize=3.0, label = '5')
+    plt.errorbar(X10,Y10, Y10_arr, Y10_aba, linestyle="none", marker="x", color="orange", markersize=4.0, capsize=3.0, label = '6')
     plt.plot(XS,YS)
     plt.plot(XC,YC, color = 'blue')
     plt.plot(XG,YG, color = 'red')
@@ -367,8 +404,8 @@ def _showMathPlotlib():
     a=plt.gca()
     a.set_yscale('log')
     a.set_xscale('log')
-    plt.xlim(1e-6,1e14)
-    plt.ylim(1e-9,1e-3)
+    #plt.xlim(1e-6,1e14)
+    #plt.ylim(1e-9,1e-3)
     plt.show()
 
 
@@ -378,9 +415,23 @@ def _showMathPlotlib():
 
 
 
-files = ['FERMI.dat', 'MisuMe.dat', 'mojave.dat', 'ratan.dat', 'Swift_uvot.dat',
-         'unkown.dat', 'butterfly-final.dat','magic.dat']
+files = [ 'swiftbatavg1.dat', 'rxtasmavg1.dat', 'kvaminmax1.dat', 'ebl1.dat', 'lat1.dat', 'MAGIC1.dat', 'ned1.dat', 'suzaku1.dat', 'swiftuvot1.dat', 'swiftxrthi1.dat', 'swiftxrtmed1.dat' ]
 
-#makeFit(files)
+makeFit(files)
 _showMathPlotlib()
 make_SplinePlot()
+
+
+###DataFiles######
+#swiftbatavg1.dat
+#rxtasmavg1.dat
+#kvaminmax1.dat
+#ebl1.dat
+#lat1.dat
+#MAGIC1.dat
+#ned1.dat
+#suzaku1.dat
+#swiftuvot1.dat
+#swiftxrthi1.dat
+#swiftxrtmed1.dat
+#################
